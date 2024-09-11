@@ -1,1 +1,0 @@
-This is to check if the second md file is created next to the readme.md file in the git
