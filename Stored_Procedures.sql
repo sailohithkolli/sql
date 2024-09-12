@@ -37,26 +37,24 @@ select top (@count) ProductName,Price from Products order by Price desc
 exec exp_n_items @count = 10;
 
 
-
---CHECK
-
 Create a stored procedure that calculates the total sales for a given year:
 
 create procedure sales_in_a_year @year int
 as
-select * from Orders where OrderDate like '@year%'
-
-exec sales_in_a_year @year = 1996;
+begin
+select count(*) as total_sales_for_a_given_year from Orders where year(OrderDate) = @year;
+end;
 
 Create a stored procedure that returns all orders for a specific customer:
 
 create procedure customer_orders @CustomerID int
 as
-select c.CustomerID,c.CustomerName,count(o.OrderID) from Customers c join 
-Orders o on c.CustomerID = o.CustomerID where c.CustomerID = @CustomerID
-group by c.CustomerID, c.CustomerName
+begin
+    select c.CustomerID,c.CustomerName,count(o.OrderID) as TotalOrders,o.OrderID, o.OrderDate 
+    from Customers c join Orders o ON c.CustomerID = o.CustomerID where c.CustomerID = @CustomerID
+    group byc.CustomerID, c.CustomerName, o.OrderID, o.OrderDate;
+end;
 
-exec customer_orders @CustomerID = 8;
 
 Create a stored procedure that returns the total number of products in each Category
 
