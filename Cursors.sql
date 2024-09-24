@@ -20,11 +20,25 @@ declare
     r employees%rowtype;
 begin
     open c2;
---loop
     fetch c2 into r;
---exit when c2%notfound;
     dbms_output.put_line(r.first_name);
---end loop;
+close c2;
+end;
+/
+
+-- with loop and exit when statement
+
+declare
+    cursor c2 is select * from employees;
+    r employees%rowtype;
+begin
+    open c2;
+loop
+    fetch c2 into r;
+--always exit immediately after the fetch to avoid duplication of last record.
+    exit when c2%notfound;
+    dbms_output.put_line(r.first_name);
+end loop;
 close c2;
 end;
 /
